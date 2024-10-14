@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:/Program Files/OpenSSL/include/**" // Add the path to OpenSSL headers here
+            ],
+            "defines": [],
+            "compilerPath": "C:/MinGW/bin/g++.exe", // Change this if you use a different compiler
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64"
+        }
+    ],
+    "version": 4
+}
