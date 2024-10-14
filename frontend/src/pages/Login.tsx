@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirecting
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate(); // Initialize the useNavigate hook
+  const navigate = useNavigate();
+  const { login } = useAuth()!; // Non-null assertion
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -15,24 +17,10 @@ const Login = () => {
         email,
         password,
       });
-      // Assuming the response contains a token or user info
-      console.log("Login successful:", response.data);
-      // Save token to local storage
-      localStorage.setItem('token', response.data.token); // Adjust based on your API response
-      // Redirect to the voting page after successful login
-      navigate('/voting'); // Adjust the route according to your app
+      login(response.data.token); // Assuming token is returned from the backend
+      navigate('/voting');
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        // Check for specific response errors
-        if (err.response) {
-          setError('Login failed. Please check your credentials.');
-        } else {
-          setError('Network error. Please try again later.');
-        }
-      } else {
-        setError('An unexpected error occurred.');
-      }
-      console.error("Error during login:", err);
+      setError('Login failed. Please check your credentials.');
     }
   };
 
@@ -42,7 +30,9 @@ const Login = () => {
       {error && <p className="text-red-500">{error}</p>}
       <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg shadow-md">
         <div className="mb-4">
-          <label className="block text-lg font-semibold mb-2 text-white" htmlFor="email">Email</label>
+          <label className="block text-lg font-semibold mb-2 text-white" htmlFor="email">
+            Email
+          </label>
           <input
             type="email"
             id="email"
@@ -53,7 +43,9 @@ const Login = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-lg font-semibold mb-2 text-white" htmlFor="password">Password</label>
+          <label className="block text-lg font-semibold mb-2 text-white" htmlFor="password">
+            Password
+          </label>
           <input
             type="password"
             id="password"

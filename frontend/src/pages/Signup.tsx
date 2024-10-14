@@ -1,30 +1,26 @@
-// src/components/Signup.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate(); // Use useNavigate instead of useHistory
+  const navigate = useNavigate();
+  const { login } = useAuth()!; // Non-null assertion
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/api/signup', {
         email,
         password,
       });
-      console.log("Signup successful:", response.data);
-      navigate('/voting'); // Redirect to the voting page after successful signup
-    } catch (err: any) {
-      if (err.response && err.response.status === 400) {
-        setError(err.response.data.message); // Display specific error message from backend
-      } else {
-        setError('Signup failed. Please try again.');
-      }
-      console.error("Error during signup:", err);
+      login(response.data.token); // Assuming token is returned from the backend
+      navigate('/voting');
+    } catch (err) {
+      setError('Signup failed. Please try again.');
     }
   };
 
@@ -34,7 +30,9 @@ const Signup = () => {
       {error && <p className="text-red-500">{error}</p>}
       <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg shadow-md">
         <div className="mb-4">
-          <label className="block text-lg font-semibold mb-2 text-white" htmlFor="email">Email</label>
+          <label className="block text-lg font-semibold mb-2 text-white" htmlFor="email">
+            Email
+          </label>
           <input
             type="email"
             id="email"
@@ -45,7 +43,9 @@ const Signup = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-lg font-semibold mb-2 text-white" htmlFor="password">Password</label>
+          <label className="block text-lg font-semibold mb-2 text-white" htmlFor="password">
+            Password
+          </label>
           <input
             type="password"
             id="password"

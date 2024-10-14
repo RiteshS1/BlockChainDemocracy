@@ -1,0 +1,26 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-o",
+                "output_blockchain", // Change this to your desired output program name
+                "cpp_blockchain/Main.cpp",  // Path to your main cpp file
+                "cpp_blockchain/Blockchain.cpp", // Add other cpp files as needed
+                "cpp_blockchain/Block.cpp",
+                "cpp_blockchain/Vote.cpp",
+                "-I", "C:/Program Files/OpenSSL/include",  // Include path for OpenSSL headers
+                "-L", "C:/Program Files/OpenSSL/lib",      // Link path for OpenSSL libraries
+                "-lssl", "-lcrypto"                         // Link to OpenSSL libraries
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        }
+    ]
+}
